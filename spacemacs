@@ -249,12 +249,26 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place you code here."
+
+  ;; Сохранить буфер
   (global-set-key (kbd "M-s-j") 'save-buffer)
   (global-set-key (kbd "<f7>") 'save-buffer)
 
+  ;; Закрыть буфер
   (global-set-key (kbd "M-s-k") 'kill-this-buffer)
 
+  ;; Закрыть окно
   (global-set-key (kbd "M-s-c") 'delete-window)
+
+  ;; Переключение буферов
+  (global-set-key (kbd "M-s-,") 'spacemacs/previous-useful-buffer)
+  (global-set-key (kbd "M-s-.") 'spacemacs/next-useful-buffer)
+  (global-set-key (kbd "s-,") 'spacemacs/previous-useful-buffer)
+  (global-set-key (kbd "s-.") 'spacemacs/next-useful-buffer)
+
+  ;; Сохранить и загрузить перспективы в/из файл(а)
+  (global-set-key (kbd "M-s-w") 'persp-save-state-to-file)
+  (global-set-key (kbd "M-s-e") 'persp-load-state-from-file)
 
   (defvar current-date-time-format "%d/%m/%Y %H:%M:%S"
     "Format of date to insert with `insert-current-date-time' func
@@ -280,6 +294,9 @@ Uses `current-date-time-format' for the formatting the date/time."
   (global-set-key (kbd "M-s-d") 'insert-current-date-time)
   (global-set-key (kbd "M-s-t") 'insert-current-time)
 
+  (setq persp-save-dir "~/.config/emacs/")
+  (setq org-journal-dir "~/Документы/Дневник/")
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -289,9 +306,8 @@ Uses `current-date-time-format' for the formatting the date/time."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-journal-dir "~/Документы/Дневник/")
  '(persp-keymap-prefix "z")
- '(persp-save-dir "/home/cyjimmy264/.config/emacs/"))
+ )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
