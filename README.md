@@ -1,2 +1,2 @@
 # .spacemacs.d
-My personal spacemacs config
+My personal [spacemacs|https://github.com/syl20bnr/spacemacs] config
