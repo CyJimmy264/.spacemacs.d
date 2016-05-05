@@ -42,7 +42,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(org-journal)
+   dotspacemacs-additional-packages '(org-journal org-plus-contrib el-get)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -75,7 +75,7 @@ values."
    ;; variable is `emacs' then the `holy-mode' is enabled at startup. `hybrid'
    ;; uses emacs key bindings for vim's insert mode, but otherwise leaves evil
    ;; unchanged. (default 'vim)
-   dotspacemacs-editing-style 'hybrid
+   dotspacemacs-editing-style 'emacs
    ;; If non nil output loading progress in `*Messages*' buffer. (default nil)
    dotspacemacs-verbose-loading nil
    ;; Specify the startup banner. Default value is `official', it displays
@@ -252,6 +252,26 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place you code here."
 
+  ;; (require 'package)
+  ;; (add-to-list 'package-archives
+  ;;              '("org" . "http://orgmode.org/elpa/") t)
+  ;; (package-initialize)
+  ;; (package-install 'org-plus-contrib)
+
+  (el-get-bundle jpellerin/emacs-crystal-mode)
+
+  (global-set-key (kbd "<s-f10>") 'holy-mode)
+  (global-set-key (kbd "<s-f11>") 'hybrid-mode)
+
+  ;; Сворачивание/разворачивание блоков кода
+  (global-set-key (kbd "M-s-[") 'hs-hide-block)
+  (global-set-key (kbd "M-s-]") 'hs-show-block)
+  (global-set-key (kbd "s-{") 'hs-hide-all)
+  (global-set-key (kbd "s-}") 'hs-show-all)
+
+  ;; Структурировать содержимое буфера
+  (global-set-key (kbd "M-s-i") 'spacemacs/indent-region-or-buffer)
+
   ;; Сохранить буфер
   (global-set-key (kbd "M-s-j") 'save-buffer)
   (global-set-key (kbd "<f7>") 'save-buffer)
@@ -299,6 +319,10 @@ Uses `current-date-time-format' for the formatting the date/time."
   (setq persp-save-dir "~/.config/emacs/")
   (setq org-journal-dir "~/Документы/Дневник/")
 
+  (require 'org)
+  (let ((current-prefix-arg 1))
+    (call-interactively 'org-reload))
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -308,8 +332,10 @@ Uses `current-date-time-format' for the formatting the date/time."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(persp-keymap-prefix "z")
- )
+ '(org-export-with-author t)
+ '(org-export-with-title t)
+ '(org-footnote-section "Ссылки")
+ '(persp-keymap-prefix "z"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
