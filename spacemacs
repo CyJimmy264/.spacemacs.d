@@ -42,7 +42,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(org-journal org-plus-contrib el-get)
+   dotspacemacs-additional-packages '(org-journal org-plus-contrib el-get json-mode)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -109,10 +109,10 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 15
+                               :size 13
                                :weight normal
                                :width normal
-                               :powerline-scale 1.3)
+                               :powerline-scale 1.8)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -264,33 +264,34 @@ you should place you code here."
   (global-set-key (kbd "<s-f11>") 'hybrid-mode)
 
   ;; Сворачивание/разворачивание блоков кода
-  (global-set-key (kbd "M-s-[") 'hs-hide-block)
-  (global-set-key (kbd "M-s-]") 'hs-show-block)
-  (global-set-key (kbd "s-{") 'hs-hide-all)
-  (global-set-key (kbd "s-}") 'hs-show-all)
+  (global-set-key (kbd "C-M-{") 'hs-hide-block)
+  (global-set-key (kbd "C-M-}") 'hs-show-block)
+  (global-set-key (kbd "C-M-(") 'hs-hide-all)
+  (global-set-key (kbd "C-M-)") 'hs-show-all)
+  (global-set-key (kbd "C-M-_") 'hs-hide-level)
 
   ;; Структурировать содержимое буфера
-  (global-set-key (kbd "M-s-i") 'spacemacs/indent-region-or-buffer)
+  (global-set-key (kbd "C-M-S-i") 'spacemacs/indent-region-or-buffer)
 
   ;; Сохранить буфер
-  (global-set-key (kbd "M-s-j") 'save-buffer)
+  (global-set-key (kbd "C-M-S-j") 'save-buffer)
   (global-set-key (kbd "<f7>") 'save-buffer)
 
   ;; Закрыть буфер
-  (global-set-key (kbd "M-s-k") 'kill-this-buffer)
+  (global-set-key (kbd "C-M-S-k") 'kill-this-buffer)
 
   ;; Закрыть окно
-  (global-set-key (kbd "M-s-c") 'delete-window)
+  (global-set-key (kbd "C-M-S-c") 'delete-window)
 
   ;; Переключение буферов
-  (global-set-key (kbd "M-s-,") 'spacemacs/previous-useful-buffer)
-  (global-set-key (kbd "M-s-.") 'spacemacs/next-useful-buffer)
+  (global-set-key (kbd "C-M-<") 'spacemacs/previous-useful-buffer)
+  (global-set-key (kbd "C-M->") 'spacemacs/next-useful-buffer)
   (global-set-key (kbd "s-,") 'spacemacs/previous-useful-buffer)
   (global-set-key (kbd "s-.") 'spacemacs/next-useful-buffer)
 
   ;; Сохранить и загрузить перспективы в/из файл(а)
-  (global-set-key (kbd "M-s-w") 'persp-save-state-to-file)
-  (global-set-key (kbd "M-s-e") 'persp-load-state-from-file)
+  (global-set-key (kbd "C-M-S-w") 'persp-save-state-to-file)
+  (global-set-key (kbd "C-M-S-e") 'persp-load-state-from-file)
 
   (defvar current-date-time-format "%d/%m/%Y %H:%M:%S"
     "Format of date to insert with `insert-current-date-time' func
@@ -313,15 +314,15 @@ Uses `current-date-time-format' for the formatting the date/time."
     (insert (format-time-string current-time-format (current-time)))
     )
 
-  (global-set-key (kbd "M-s-d") 'insert-current-date-time)
-  (global-set-key (kbd "M-s-t") 'insert-current-time)
+  (global-set-key (kbd "C-M-S-d") 'insert-current-date-time)
+  (global-set-key (kbd "C-M-S-t") 'insert-current-time)
 
   (setq persp-save-dir "~/.config/emacs/")
   (setq org-journal-dir "~/Документы/Дневник/")
 
-  (require 'org)
-  (let ((current-prefix-arg 1))
-    (call-interactively 'org-reload))
+  ;; (require 'org)
+  ;; (let ((current-prefix-arg 1))
+  ;;   (call-interactively 'org-reload))
 
   )
 
