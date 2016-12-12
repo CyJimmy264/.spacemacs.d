@@ -18,6 +18,8 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     sql
+     javascript
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -35,14 +37,14 @@ values."
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      ;; spell-checking
-     syntax-checking
+     ;; syntax-checking
      version-control
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(org-journal org-plus-contrib el-get)
+   dotspacemacs-additional-packages '(org-journal org-plus-contrib el-get toggle-quotes web-beautify format-sql)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -109,10 +111,10 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 15
+                               :size 13
                                :weight normal
                                :width normal
-                               :powerline-scale 1.3)
+                               :powerline-scale 1.4)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -242,6 +244,25 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  (fset 'toggle-parser-debug
+        (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([C-home 134217848 115 101 97 tab 102 111 114 tab return 100 101 102 105 110 101 40 39 68 69 66 85 71 return 1 S-down 134217787 21 67108896 21 67108896] 0 "%d")) arg)))
+
+  (fset 'toggle-parser-new-tests-search
+        (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([C-home 134217848 115 101 97 tab 102 111 114 tab return 100 101 102 105 110 101 40 39 78 69 87 95 84 69 83 84 83 95 83 69 65 82 67 72 return 1 S-down 134217787 21 67108896 21 67108896] 0 "%d")) arg)))
+
+  (fset 'toggle-parser-test-first
+        (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([C-home 134217848 115 101 97 tab 102 111 114 tab return 100 101 102 105 110 101 40 39 84 69 83 84 95 70 73 82 83 84 return 1 S-down 134217787 21 67108896 21 67108896] 0 "%d")) arg)))
+
+  (defun lines-to-cslist (start end &optional arg)
+    (interactive "r\nP")
+    (let ((insertion
+           (mapconcat 
+            (lambda (x) (format "\"%s\"" x))
+            (split-string (buffer-substring start end)) ", ")))
+      (delete-region start end)
+      (insert insertion)
+      (when arg (forward-char (length insertion)))))
+
   )
 
 (defun dotspacemacs/user-config ()
@@ -263,11 +284,20 @@ you should place you code here."
   (global-set-key (kbd "<s-f10>") 'holy-mode)
   (global-set-key (kbd "<s-f11>") 'hybrid-mode)
 
+  (global-set-key (kbd "s-'") 'toggle-quotes)
+
+  (global-set-key (kbd "s-d") 'toggle-parser-debug)
+  (global-set-key (kbd "s-s") 'toggle-parser-new-tests-search)
+  (global-set-key (kbd "s-f") 'toggle-parser-test-first)
+
+  (global-set-key (kbd "s-;") 'goto-line)
+
   ;; Сворачивание/разворачивание блоков кода
   (global-set-key (kbd "M-s-[") 'hs-hide-block)
   (global-set-key (kbd "M-s-]") 'hs-show-block)
   (global-set-key (kbd "s-{") 'hs-hide-all)
   (global-set-key (kbd "s-}") 'hs-show-all)
+  (global-set-key (kbd "M-s--") 'hs-hide-level)
 
   ;; Структурировать содержимое буфера
   (global-set-key (kbd "M-s-i") 'spacemacs/indent-region-or-buffer)
@@ -283,10 +313,12 @@ you should place you code here."
   (global-set-key (kbd "M-s-c") 'delete-window)
 
   ;; Переключение буферов
-  (global-set-key (kbd "M-s-,") 'spacemacs/previous-useful-buffer)
-  (global-set-key (kbd "M-s-.") 'spacemacs/next-useful-buffer)
-  (global-set-key (kbd "s-,") 'spacemacs/previous-useful-buffer)
-  (global-set-key (kbd "s-.") 'spacemacs/next-useful-buffer)
+  (global-set-key (kbd "<s-menu>") 'helm-mini)
+  (global-set-key (kbd "M-s-,") 'previous-buffer)
+  (global-set-key (kbd "M-s-.") 'next-buffer)
+  (global-set-key (kbd "s-/") 'mode-line-other-buffer)
+  (global-set-key (kbd "s-,") 'previous-buffer)
+  (global-set-key (kbd "s-.") 'next-buffer)
 
   ;; Сохранить и загрузить перспективы в/из файл(а)
   (global-set-key (kbd "M-s-w") 'persp-save-state-to-file)
@@ -332,6 +364,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(org-export-with-author t)
  '(org-export-with-title t)
  '(org-footnote-section "Ссылки")
@@ -339,7 +372,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  '(org-journal-find-file (quote find-file))
  '(package-selected-packages
    (quote
-    (tidy php-mode ws-butler window-numbering which-key web-mode volatile-highlights vi-tilde-fringe use-package toc-org tagedit spacemacs-theme spaceline solarized-theme smooth-scrolling smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quelpa popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox page-break-lines orgit org-repo-todo org-present org-pomodoro org-plus-contrib org-journal org-bullets open-junk-file neotree move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme less-css-mode jade-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe git-gutter-fringe+ gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav el-get drupal-mode diff-hl define-word company-web company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (format-sql sql-indent livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode hide-comnt uuidgen pug-mode org-projectile org org-download mwim link-hint git-link eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff goto-chg undo-tree dumb-jump diminish column-enforce-mode web-beautify toggle-quotes sublimity powerline f hydra spinner alert log4e gntp s markdown-mode parent-mode projectile request haml-mode gitignore-mode fringe-helper git-gutter+ git-gutter flycheck pkg-info epl flx magit magit-popup git-commit with-editor smartparens iedit anzu highlight web-completion-data pos-tip company yasnippet packed dash helm avy helm-core async auto-complete popup package-build bind-key bind-map evil tidy php-mode ws-butler window-numbering which-key web-mode volatile-highlights vi-tilde-fringe use-package toc-org tagedit spacemacs-theme spaceline solarized-theme smooth-scrolling smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quelpa popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox page-break-lines orgit org-repo-todo org-present org-pomodoro org-plus-contrib org-journal org-bullets open-junk-file neotree move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme less-css-mode jade-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe git-gutter-fringe+ gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav el-get drupal-mode diff-hl define-word company-web company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(persp-keymap-prefix "z"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
