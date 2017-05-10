@@ -18,6 +18,9 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     c-c++
+     ruby
+     clojure
      sql
      javascript
      ;; ----------------------------------------------------------------
@@ -44,7 +47,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(org-journal org-plus-contrib el-get toggle-quotes web-beautify format-sql)
+   dotspacemacs-additional-packages '(org-journal org-plus-contrib el-get toggle-quotes web-beautify format-sql feature-mode)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -77,7 +80,7 @@ values."
    ;; variable is `emacs' then the `holy-mode' is enabled at startup. `hybrid'
    ;; uses emacs key bindings for vim's insert mode, but otherwise leaves evil
    ;; unchanged. (default 'vim)
-   dotspacemacs-editing-style 'emacs
+   dotspacemacs-editing-style 'hybrid
    ;; If non nil output loading progress in `*Messages*' buffer. (default nil)
    dotspacemacs-verbose-loading nil
    ;; Specify the startup banner. Default value is `official', it displays
@@ -253,6 +256,14 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (fset 'toggle-parser-test-first
         (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([C-home 134217848 115 101 97 tab 102 111 114 tab return 100 101 102 105 110 101 40 39 84 69 83 84 95 70 73 82 83 84 return 1 S-down 134217787 21 67108896 21 67108896] 0 "%d")) arg)))
 
+  (defun insert-psysh ()
+    (interactive)
+    (mwim-end-of-line-or-code)
+    (newline-and-indent)
+    (insert "eval(\\Psy\\sh());")
+    (newline-and-indent)
+    )
+
   (defun lines-to-cslist (start end &optional arg)
     (interactive "r\nP")
     (let ((insertion
@@ -262,6 +273,9 @@ before packages are loaded. If you are unsure, you should try in setting them in
       (delete-region start end)
       (insert insertion)
       (when arg (forward-char (length insertion)))))
+
+  (defun change-state-to-insert ()
+    (setq evil-default-state 'insert))
 
   )
 
@@ -278,6 +292,7 @@ you should place you code here."
   ;;              '("org" . "http://orgmode.org/elpa/") t)
   ;; (package-initialize)
   ;; (package-install 'org-plus-contrib)
+  (setq recentf-auto-cleanup 'never)
 
   (el-get-bundle jpellerin/emacs-crystal-mode)
 
@@ -285,6 +300,7 @@ you should place you code here."
   (global-set-key (kbd "<s-f11>") 'hybrid-mode)
 
   (global-set-key (kbd "s-'") 'toggle-quotes)
+  (global-set-key (kbd "s-(") 'sp-splice-sexp)
 
   (global-set-key (kbd "s-d") 'toggle-parser-debug)
   (global-set-key (kbd "s-s") 'toggle-parser-new-tests-search)
@@ -324,6 +340,8 @@ you should place you code here."
   (global-set-key (kbd "M-s-w") 'persp-save-state-to-file)
   (global-set-key (kbd "M-s-e") 'persp-load-state-from-file)
 
+  (global-set-key (kbd "M-s-p") 'insert-psysh)
+
   (defvar current-date-time-format "%d/%m/%Y %H:%M:%S"
     "Format of date to insert with `insert-current-date-time' func
 See help of `format-time-string' for possible replacements")
@@ -355,6 +373,10 @@ Uses `current-date-time-format' for the formatting the date/time."
   (let ((current-prefix-arg 1))
     (call-interactively 'org-reload))
 
+  (global-set-key (kbd "M-s-h") 'org-journal-new-entry)
+
+  ; (add-hook 'find-file-hook 'change-state-to-insert)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -364,6 +386,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(bind-map-default-evil-states (quote (insert normal motion visual)))
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(org-export-with-author t)
  '(org-export-with-title t)
@@ -372,12 +395,13 @@ Uses `current-date-time-format' for the formatting the date/time."
  '(org-journal-find-file (quote find-file))
  '(package-selected-packages
    (quote
-    (format-sql sql-indent livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode hide-comnt uuidgen pug-mode org-projectile org org-download mwim link-hint git-link eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff goto-chg undo-tree dumb-jump diminish column-enforce-mode web-beautify toggle-quotes sublimity powerline f hydra spinner alert log4e gntp s markdown-mode parent-mode projectile request haml-mode gitignore-mode fringe-helper git-gutter+ git-gutter flycheck pkg-info epl flx magit magit-popup git-commit with-editor smartparens iedit anzu highlight web-completion-data pos-tip company yasnippet packed dash helm avy helm-core async auto-complete popup package-build bind-key bind-map evil tidy php-mode ws-butler window-numbering which-key web-mode volatile-highlights vi-tilde-fringe use-package toc-org tagedit spacemacs-theme spaceline solarized-theme smooth-scrolling smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quelpa popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox page-break-lines orgit org-repo-todo org-present org-pomodoro org-plus-contrib org-journal org-bullets open-junk-file neotree move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme less-css-mode jade-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe git-gutter-fringe+ gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav el-get drupal-mode diff-hl define-word company-web company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (feature-mode disaster company-c-headers cmake-mode clang-format rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby winum unfill fuzzy clojure-snippets clj-refactor inflections edn paredit peg cider-eval-sexp-fu cider seq queue clojure-mode manage-minor-mode js-auto-beautify format-sql sql-indent livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode hide-comnt uuidgen pug-mode org-projectile org org-download mwim link-hint git-link eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff goto-chg undo-tree dumb-jump diminish column-enforce-mode web-beautify toggle-quotes sublimity powerline f hydra spinner alert log4e gntp s markdown-mode parent-mode projectile request haml-mode gitignore-mode fringe-helper git-gutter+ git-gutter flycheck pkg-info epl flx magit magit-popup git-commit with-editor smartparens iedit anzu highlight web-completion-data pos-tip company yasnippet packed dash helm avy helm-core async auto-complete popup package-build bind-key bind-map evil tidy php-mode ws-butler window-numbering which-key web-mode volatile-highlights vi-tilde-fringe use-package toc-org tagedit spacemacs-theme spaceline solarized-theme smooth-scrolling smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quelpa popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox page-break-lines orgit org-repo-todo org-present org-pomodoro org-plus-contrib org-journal org-bullets open-junk-file neotree move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme less-css-mode jade-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe git-gutter-fringe+ gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav el-get drupal-mode diff-hl define-word company-web company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(persp-keymap-prefix "z"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((((class color) (min-colors 257)) (:foreground "#F8F8F2" :background "#272822")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background "#1B1E1C"))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
