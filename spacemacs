@@ -18,6 +18,8 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     yaml
+     ruby
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -42,7 +44,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(org-journal org-plus-contrib el-get)
+   dotspacemacs-additional-packages '(org-journal org-plus-contrib el-get robe)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -242,6 +244,13 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+
+  (add-hook 'ruby-mode-hook 'robe-mode)
+
+  ;; (eval-after-load 'company
+  ;;   '(push 'company-robe company-backends))
+
+  (add-hook 'robe-mode-hook 'ac-robe-setup)
   )
 
 (defun dotspacemacs/user-config ()
@@ -268,6 +277,7 @@ you should place you code here."
   (global-set-key (kbd "M-s-]") 'hs-show-block)
   (global-set-key (kbd "s-{") 'hs-hide-all)
   (global-set-key (kbd "s-}") 'hs-show-all)
+  (global-set-key (kbd "M-s--") 'hs-hide-level)
 
   ;; Структурировать содержимое буфера
   (global-set-key (kbd "M-s-i") 'spacemacs/indent-region-or-buffer)
@@ -283,10 +293,11 @@ you should place you code here."
   (global-set-key (kbd "M-s-c") 'delete-window)
 
   ;; Переключение буферов
-  (global-set-key (kbd "M-s-,") 'spacemacs/previous-useful-buffer)
-  (global-set-key (kbd "M-s-.") 'spacemacs/next-useful-buffer)
-  (global-set-key (kbd "s-,") 'spacemacs/previous-useful-buffer)
-  (global-set-key (kbd "s-.") 'spacemacs/next-useful-buffer)
+  (global-set-key (kbd "M-s-,") 'previous-buffer)
+  (global-set-key (kbd "M-s-.") 'next-buffer)
+  (global-set-key (kbd "s-/") 'mode-line-other-buffer)
+  (global-set-key (kbd "s-,") 'previous-buffer)
+  (global-set-key (kbd "s-.") 'next-buffer)
 
   ;; Сохранить и загрузить перспективы в/из файл(а)
   (global-set-key (kbd "M-s-w") 'persp-save-state-to-file)
@@ -323,6 +334,17 @@ Uses `current-date-time-format' for the formatting the date/time."
   (let ((current-prefix-arg 1))
     (call-interactively 'org-reload))
 
+  (add-hook 'ruby-mode-hook
+            (lambda () (hs-minor-mode)))
+
+  (eval-after-load "hideshow"
+    '(add-to-list 'hs-special-modes-alist
+                  `(ruby-mode
+                    ,(rx (or "def" "class" "module" "do" "{" "[" "if" "else" "unless")) ; Block start
+                    ,(rx (or "}" "]" "end"))                       ; Block end
+                    ,(rx (or "#" "=begin"))                        ; Comment start
+                    ruby-forward-sexp nil)))
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -339,7 +361,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  '(org-journal-find-file (quote find-file))
  '(package-selected-packages
    (quote
-    (tidy php-mode ws-butler window-numbering which-key web-mode volatile-highlights vi-tilde-fringe use-package toc-org tagedit spacemacs-theme spaceline solarized-theme smooth-scrolling smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quelpa popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox page-break-lines orgit org-repo-todo org-present org-pomodoro org-plus-contrib org-journal org-bullets open-junk-file neotree move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme less-css-mode jade-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe git-gutter-fringe+ gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav el-get drupal-mode diff-hl define-word company-web company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (minitest hide-comnt yaml-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode rbenv rake chruby bundler uuidgen powerline pug-mode spinner org-projectile org org-download mwim link-hint hydra parent-mode projectile git-link pkg-info epl flx eyebrowse evil-visual-mark-mode evil-unimpaired smartparens iedit evil-ediff anzu evil goto-chg undo-tree highlight dumb-jump s diminish column-enforce-mode bind-map bind-key packed dash helm avy helm-core async popup package-build inf-ruby helm-robe robe rinari json-mode f alert log4e gntp markdown-mode request haml-mode gitignore-mode fringe-helper git-gutter+ git-gutter flycheck magit magit-popup git-commit with-editor web-completion-data pos-tip company yasnippet auto-complete tidy php-mode ws-butler window-numbering which-key web-mode volatile-highlights vi-tilde-fringe use-package toc-org tagedit spacemacs-theme spaceline solarized-theme smooth-scrolling smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quelpa popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox page-break-lines orgit org-repo-todo org-present org-pomodoro org-plus-contrib org-journal org-bullets open-junk-file neotree move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme less-css-mode jade-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe git-gutter-fringe+ gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav el-get drupal-mode diff-hl define-word company-web company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(persp-keymap-prefix "z"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
