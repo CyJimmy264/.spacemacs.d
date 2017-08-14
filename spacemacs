@@ -326,6 +326,10 @@ you should place you code here."
 
   (el-get-bundle jpellerin/emacs-crystal-mode)
 
+  (spacemacs/declare-prefix "d" "SPC super doubling")
+  (spacemacs/declare-prefix "dd" "dates insertion")
+
+
   (global-set-key (kbd "<s-f10>") 'holy-mode)
   (global-set-key (kbd "<s-f11>") 'hybrid-mode)
 
@@ -340,6 +344,7 @@ you should place you code here."
 
   ;; Сворачивание/разворачивание блоков кода
   (global-set-key (kbd "M-s-[") 'hs-hide-block)
+
   (global-set-key (kbd "M-s-]") 'hs-show-block)
   (global-set-key (kbd "s-{") 'hs-hide-all)
   (global-set-key (kbd "s-}") 'hs-show-all)
@@ -396,6 +401,9 @@ Uses `current-date-time-format' for the formatting the date/time."
 
   (global-set-key (kbd "M-s-d") 'insert-current-date-time)
   (global-set-key (kbd "M-s-t") 'insert-current-time)
+
+  (spacemacs/set-leader-keys "ddd" 'insert-current-date-time)
+  (spacemacs/set-leader-keys "ddt" 'insert-current-time)
 
   (setq persp-save-dir "~/.config/emacs/")
   (setq org-journal-dir "~/Документы/Дневник/")
