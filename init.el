@@ -44,6 +44,7 @@ values."
      ;; spell-checking
      ;; syntax-checking
      version-control
+     themes-megapack
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -60,7 +61,10 @@ values."
 
      org-journal
      org-plus-contrib
+
      crontab-mode
+     apache-mode
+     twig-mode
      feature-mode
      )
    ;; A list of packages and/or extensions that will not be install and loaded.
@@ -298,8 +302,17 @@ before packages are loaded. If you are unsure, you should try in setting them in
       (insert insertion)
       (when arg (forward-char (length insertion)))))
 
-  (defun change-state-to-insert ()
-    (setq evil-default-state 'insert))
+  ;; Create Cyrillic-CP1251 Language Environment menu item
+  (set-language-info-alist
+   "Cyrillic-CP1251" `((charset cyrillic-iso8859-5)
+                       (coding-system cp1251)
+                       (coding-priority cp1251)
+                       (input-method . "cyrillic-jcuken")
+                       (features cyril-util)
+                       (unibyte-display . cp1251)
+                       (sample-text . "Russian (Русский) Здравствуйте!")
+                       (documentation . "Support for Cyrillic CP1251."))
+   '("Cyrillic"))
 
   (add-hook 'ruby-mode-hook 'robe-mode)
 
@@ -405,6 +418,8 @@ Uses `current-date-time-format' for the formatting the date/time."
   (spacemacs/set-leader-keys "ddd" 'insert-current-date-time)
   (spacemacs/set-leader-keys "ddt" 'insert-current-time)
 
+  (global-set-key (kbd "M-s-h") 'org-journal-new-entry)
+
   (setq persp-save-dir "~/.config/emacs/")
   (setq org-journal-dir "~/Документы/Дневник/")
 
@@ -412,7 +427,6 @@ Uses `current-date-time-format' for the formatting the date/time."
   (let ((current-prefix-arg 1))
     (call-interactively 'org-reload))
 
-  (global-set-key (kbd "M-s-h") 'org-journal-new-entry)
 
   (add-hook 'ruby-mode-hook
             (lambda () (hs-minor-mode)))
@@ -424,8 +438,6 @@ Uses `current-date-time-format' for the formatting the date/time."
                     ,(rx (or "}" "]" "end"))                       ; Block end
                     ,(rx (or "#" "=begin"))                        ; Comment start
                     ruby-forward-sexp nil)))
-
-  ; (add-hook 'find-file-hook 'change-state-to-insert)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -436,6 +448,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(bind-map-default-evil-states (quote (insert normal motion visual)))
+ '(evil-want-Y-yank-to-eol t)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(org-export-with-author t)
  '(org-export-with-title t)
@@ -444,7 +457,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  '(org-journal-find-file (quote find-file))
  '(package-selected-packages
    (quote
-    (yaml-mode crontab-mode feature-mode disaster company-c-headers cmake-mode clang-format rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby winum unfill fuzzy clojure-snippets clj-refactor inflections edn paredit peg cider-eval-sexp-fu cider seq queue clojure-mode manage-minor-mode js-auto-beautify format-sql sql-indent livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode hide-comnt uuidgen pug-mode org-projectile org org-download mwim link-hint git-link eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff goto-chg undo-tree dumb-jump diminish column-enforce-mode web-beautify toggle-quotes sublimity powerline f hydra spinner alert log4e gntp s markdown-mode parent-mode projectile request haml-mode gitignore-mode fringe-helper git-gutter+ git-gutter flycheck pkg-info epl flx magit magit-popup git-commit with-editor smartparens iedit anzu highlight web-completion-data pos-tip company yasnippet packed dash helm avy helm-core async auto-complete popup package-build bind-key bind-map evil tidy php-mode ws-butler window-numbering which-key web-mode volatile-highlights vi-tilde-fringe use-package toc-org tagedit spacemacs-theme spaceline solarized-theme smooth-scrolling smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quelpa popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox page-break-lines orgit org-repo-todo org-present org-pomodoro org-plus-contrib org-journal org-bullets open-junk-file neotree move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme less-css-mode jade-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe git-gutter-fringe+ gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav el-get drupal-mode diff-hl define-word company-web company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (feature-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby twig-mode apache-mode yaml-mode zonokai-theme zen-and-art-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tronesque-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme pastels-on-dark-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme niflheim-theme naquadah-theme mustang-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme firebelly-theme farmhouse-theme espresso-theme dracula-theme django-theme darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme format-sql sql-indent livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode hide-comnt uuidgen pug-mode org-projectile org org-download mwim link-hint git-link eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff goto-chg undo-tree dumb-jump diminish column-enforce-mode web-beautify toggle-quotes sublimity powerline f hydra spinner alert log4e gntp s markdown-mode parent-mode projectile request haml-mode gitignore-mode fringe-helper git-gutter+ git-gutter flycheck pkg-info epl flx magit magit-popup git-commit with-editor smartparens iedit anzu highlight web-completion-data pos-tip company yasnippet packed dash helm avy helm-core async auto-complete popup package-build bind-key bind-map evil tidy php-mode ws-butler window-numbering which-key web-mode volatile-highlights vi-tilde-fringe use-package toc-org tagedit spacemacs-theme spaceline solarized-theme smooth-scrolling smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quelpa popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox page-break-lines orgit org-repo-todo org-present org-pomodoro org-plus-contrib org-journal org-bullets open-junk-file neotree move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme less-css-mode jade-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe git-gutter-fringe+ gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav el-get drupal-mode diff-hl define-word company-web company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(persp-keymap-prefix "z"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
