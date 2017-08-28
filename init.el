@@ -472,6 +472,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(bind-map-default-evil-states (quote (insert normal motion visual)))
+ '(bookmark-bmenu-file-column 60)
  '(evil-want-Y-yank-to-eol t)
  '(helm-buffer-max-length 40)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
@@ -489,4 +490,4 @@ Uses `current-date-time-format' for the formatting the date/time."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((((class color) (min-colors 257)) (:foreground "#F8F8F2" :background "#272822")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background "#1B1E1C")))))
