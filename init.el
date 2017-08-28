@@ -290,6 +290,13 @@ before packages are loaded. If you are unsure, you should try in setting them in
     (newline-and-indent)
     )
 
+  (defun insert-phpdeclafun ()
+    (interactive)
+    (mwim-end-of-line-or-code)
+    (newline-and-indent)
+    (insert "debug(color(__CLASS__.'->'.__FUNCTION__, 'light_purple'));")
+    (newline-and-indent)
+    )
 
   (defun lines-to-cslist (start end &optional arg)
     (interactive "r\nP")
@@ -312,6 +319,19 @@ before packages are loaded. If you are unsure, you should try in setting them in
                        (sample-text . "Russian (Русский) Здравствуйте!")
                        (documentation . "Support for Cyrillic CP1251."))
    '("Cyrillic"))
+
+  (defun sql-beautify-region (beg end)
+    "Beautify SQL in region between beg and END."
+    (interactive "r")
+    (save-excursion
+      (shell-command-on-region beg end "anbt-sql-formatter" nil t)))
+  ;; change sqlbeautify to anbt-sql-formatter if you
+  ;;ended up using the ruby gem
+
+  (defun sql-beautify-buffer ()
+    "Beautify SQL in buffer."
+    (interactive)
+    (sql-beautify-region (point-min) (point-max)))
 
   (add-hook 'ruby-mode-hook 'robe-mode)
 
@@ -393,6 +413,7 @@ you should place you code here."
 
   (global-set-key (kbd "M-s-p") 'insert-psysh)
   (global-set-key (kbd "M-s-f") 'insert-phpdefun)
+  (global-set-key (kbd "C-M-s-f") 'insert-phpdeclafun)
 
   (defvar current-date-time-format "%d/%m/%Y %H:%M:%S"
     "Format of date to insert with `insert-current-date-time' func
@@ -452,6 +473,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  ;; If there is more than one, they won't work right.
  '(bind-map-default-evil-states (quote (insert normal motion visual)))
  '(evil-want-Y-yank-to-eol t)
+ '(helm-buffer-max-length 40)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(org-export-with-author t)
  '(org-export-with-title t)
