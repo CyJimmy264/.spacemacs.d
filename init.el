@@ -389,6 +389,9 @@ you should place you code here."
   ;; Структурировать содержимое буфера
   (global-set-key (kbd "M-s-i") 'spacemacs/indent-region-or-buffer)
 
+  (global-set-key (kbd "s-i") 'lisp-interaction-mode)
+  (global-set-key (kbd "s-j") 'eval-print-last-sexp)
+
   ;; Сохранить буфер
   (global-set-key (kbd "M-s-j") 'save-buffer)
   (global-set-key (kbd "<f7>") 'save-buffer)
@@ -474,6 +477,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  '(bind-map-default-evil-states (quote (insert normal motion visual)))
  '(bookmark-bmenu-file-column 60)
  '(evil-want-Y-yank-to-eol t)
+ '(google-translate-default-target-language "ru")
  '(helm-buffer-max-length 40)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(org-export-with-author t)
