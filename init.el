@@ -265,6 +265,8 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  (package-initialize)
+
   (fset 'toggle-parser-debug
         (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([C-home 134217848 115 101 97 tab 102 111 114 tab return 100 101 102 105 110 101 40 39 68 69 66 85 71 return 1 S-down 134217787 21 67108896 21 67108896] 0 "%d")) arg)))
 
