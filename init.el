@@ -414,6 +414,10 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place you code here."
+  (require 'google-translate)
+  (require 'google-translate-default-ui)
+  (setq google-translate-default-source-language "en")
+  (setq google-translate-default-target-language "ru")
 
   (setq paradox-github-token (getenv "PARADOX_GITHUB_TOKEN"))
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -451,8 +455,11 @@ you should place you code here."
   (global-set-key (kbd "s-}") 'hs-show-all)
   (global-set-key (kbd "M-s--") 'hs-hide-level)
 
+  (global-set-key (kbd "M-s-g") 'dumb-jump-go)
+
   ;; Структурировать содержимое буфера
   (global-set-key (kbd "M-s-i") 'spacemacs/indent-region-or-buffer)
+  (global-set-key (kbd "M-s-u") 'untabify)
 
   (global-set-key (kbd "s-i") 'lisp-interaction-mode)
   (global-set-key (kbd "s-j") 'eval-print-last-sexp)
@@ -543,9 +550,9 @@ Uses `current-date-time-format' for the formatting the date/time."
  '(bookmark-bmenu-file-column 60)
  '(evil-want-Y-yank-to-eol nil)
  '(exec-path-from-shell-check-startup-files nil)
- '(google-translate-default-target-language "ru" t)
  '(helm-buffer-max-length 40)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
+ '(org-cycle-include-plain-lists (quote integrate))
  '(org-export-with-author t)
  '(org-export-with-title t)
  '(org-footnote-section "Ссылки")
