@@ -395,6 +395,14 @@ before packages are loaded. If you are unsure, you should try in setting them in
     (interactive)
     (sql-beautify-region (point-min) (point-max)))
 
+  (defun helm-relative ()
+    (interactive)
+    (if (equal "Default" (spacemacs//current-layout-name))
+        (helm-mini)
+      (helm-projectile)
+        )
+    )
+
   (add-hook 'ruby-mode-hook 'robe-mode)
 
   ;; (eval-after-load 'company
@@ -475,7 +483,7 @@ you should place you code here."
   (global-set-key (kbd "M-s-c") 'delete-window)
 
   ;; Переключение буферов
-  (global-set-key (kbd "<s-menu>") 'helm-mini)
+  (global-set-key (kbd "<s-menu>") 'helm-relative)
   (global-set-key (kbd "<M-s-menu>") 'spacemacs/helm-perspectives)
   (global-set-key (kbd "M-s-,") 'previous-buffer)
   (global-set-key (kbd "M-s-.") 'next-buffer)
