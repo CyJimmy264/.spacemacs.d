@@ -476,6 +476,7 @@ you should place you code here."
 
   ;; Переключение буферов
   (global-set-key (kbd "<s-menu>") 'helm-mini)
+  (global-set-key (kbd "<M-s-menu>") 'spacemacs/helm-perspectives)
   (global-set-key (kbd "M-s-,") 'previous-buffer)
   (global-set-key (kbd "M-s-.") 'next-buffer)
   (global-set-key (kbd "s-/") 'mode-line-other-buffer)
