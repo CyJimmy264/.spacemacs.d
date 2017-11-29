@@ -66,6 +66,8 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
    '(
+     history
+
      el-get
      robe
 
@@ -436,6 +438,8 @@ you should place you code here."
   ;;              '("org" . "http://orgmode.org/elpa/") t)
   ;; (package-initialize)
   ;; (package-install 'org-plus-contrib)
+
+
   (setq recentf-auto-cleanup 'never)
 
   ;; (el-get-bundle jpellerin/emacs-crystal-mode)
@@ -443,6 +447,17 @@ you should place you code here."
   (spacemacs/declare-prefix "d" "SPC super doubling")
   (spacemacs/declare-prefix "dd" "dates insertion")
 
+  (global-set-key (kbd "<s-f1>") 'spacemacs/persp-switch-to-1)
+  (global-set-key (kbd "<s-f2>") 'spacemacs/persp-switch-to-2)
+  (global-set-key (kbd "<s-f3>") 'spacemacs/persp-switch-to-3)
+  (global-set-key (kbd "<s-f4>") 'spacemacs/persp-switch-to-4)
+  (global-set-key (kbd "<s-f5>") 'spacemacs/persp-switch-to-5)
+  (global-set-key (kbd "<s-f6>") 'spacemacs/persp-switch-to-6)
+  (global-set-key (kbd "<s-f7>") 'spacemacs/persp-switch-to-7)
+
+  (global-set-key (kbd "<s-insert>") 'history-add-history)
+  (global-set-key (kbd "<s-prior>") 'history-prev-history)
+  (global-set-key (kbd "<s-next>") 'history-next-history)
 
   (global-set-key (kbd "<s-f10>") 'holy-mode)
   (global-set-key (kbd "<s-f11>") 'hybrid-mode)
@@ -563,6 +578,12 @@ Uses `current-date-time-format' for the formatting the date/time."
  '(evil-want-Y-yank-to-eol nil)
  '(exec-path-from-shell-check-startup-files nil)
  '(helm-buffer-max-length 40)
+ '(history-advised-before-functions
+   (quote
+    (imenu isearch-mode beginning-of-buffer end-of-buffer dumb-jump-go goto-line outline-up-heading)))
+ '(history-length 1000)
+ '(history-mode t)
+ '(history-window-local-history t)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(org-cycle-include-plain-lists (quote integrate))
  '(org-export-with-author t)
@@ -577,7 +598,8 @@ Uses `current-date-time-format' for the formatting the date/time."
      ("org" . "http://orgmode.org/elpa/"))))
  '(package-selected-packages
    (quote
-    (crystal-mode monokai-theme twig-mode toggle-quotes format-sql feature-mode el-get apache-mode org-journal cycle-quotes yaml-mode web-mode web-beautify unfill tagedit sql-indent smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake pug-mode phpunit phpcbf php-auto-yasnippets orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download mwim mmm-mode minitest markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd less-css-mode json-snatcher json-reformat js2-refactor js-doc htmlize helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy evil-magit magit magit-popup git-commit with-editor emmet-mode drupal-mode php-mode disaster company-web web-completion-data company-tern dash-functional tern company-c-headers company cmake-mode clojure-snippets clj-refactor inflections edn multiple-cursors paredit peg clang-format cider-eval-sexp-fu cider seq queue clojure-mode chruby bundler inf-ruby auto-yasnippet ac-ispell auto-complete ws-butler winum volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed ace-link ace-jump-helm-line helm helm-core popup yasnippet which-key php-extras json-mode js2-mode evil-unimpaired diff-hl company-statistics coffee-mode async aggressive-indent adaptive-wrap ace-window))))
+    (history crystal-mode monokai-theme twig-mode toggle-quotes format-sql feature-mode el-get apache-mode org-journal cycle-quotes yaml-mode web-mode web-beautify unfill tagedit sql-indent smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake pug-mode phpunit phpcbf php-auto-yasnippets orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download mwim mmm-mode minitest markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd less-css-mode json-snatcher json-reformat js2-refactor js-doc htmlize helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy evil-magit magit magit-popup git-commit with-editor emmet-mode drupal-mode php-mode disaster company-web web-completion-data company-tern dash-functional tern company-c-headers company cmake-mode clojure-snippets clj-refactor inflections edn multiple-cursors paredit peg clang-format cider-eval-sexp-fu cider seq queue clojure-mode chruby bundler inf-ruby auto-yasnippet ac-ispell auto-complete ws-butler winum volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed ace-link ace-jump-helm-line helm helm-core popup yasnippet which-key php-extras json-mode js2-mode evil-unimpaired diff-hl company-statistics coffee-mode async aggressive-indent adaptive-wrap ace-window)))
+ '(php-mode-coding-style (quote psr2)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
