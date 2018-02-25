@@ -513,6 +513,8 @@ you should place you code here."
   ;; Переключение буферов
   (global-set-key (kbd "<s-menu>") 'helm-relative)
   (global-set-key (kbd "<M-s-menu>") 'spacemacs/helm-perspectives)
+  (global-set-key (kbd "<M-menu>") 'helm-relative)
+  (global-set-key (kbd "<C-M-menu>") 'spacemacs/helm-perspectives)
   (global-set-key (kbd "M-s-,") 'previous-buffer)
   (global-set-key (kbd "M-s-.") 'next-buffer)
   (global-set-key (kbd "s-/") 'mode-line-other-buffer)
@@ -580,6 +582,12 @@ Uses `current-date-time-format' for the formatting the date/time."
                     ,(rx (or "}" "]" "end"))                       ; Block end
                     ,(rx (or "#" "=begin"))                        ; Comment start
                     ruby-forward-sexp nil)))
+
+  (setq create-lockfiles nil)
+  (setq backup-directory-alist
+        `((".*" . ,(concat user-emacs-directory "backups/"))))
+  (setq auto-save-file-name-transforms
+        `((".*" ,(concat user-emacs-directory "backups/") t)))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
