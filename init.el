@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     go
      yaml
      c-c++
      crystal
@@ -132,7 +133,7 @@ values."
    ;; with `:variables' keyword (similar to layers). Check the editing styles
    ;; section of the documentation for details on available variables.
    ;; (default 'vim)
-   dotspacemacs-editing-style 'emacs
+   dotspacemacs-editing-style 'hybrid
    ;; If non nil output loading progress in `*Messages*' buffer. (default nil)
    dotspacemacs-verbose-loading nil
    ;; Specify the startup banner. Default value is `official', it displays
@@ -472,6 +473,8 @@ you should place you code here."
   (global-set-key (kbd "<s-f10>") 'holy-mode)
   (global-set-key (kbd "<s-f11>") 'hybrid-mode)
 
+  (global-set-key (kbd "<s-return>") 'org-meta-return)
+
   (global-set-key (kbd "s-'") 'toggle-quotes)
   (global-set-key (kbd "s-(") 'sp-splice-sexp)
 
@@ -613,6 +616,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  '(history-mode t)
  '(history-window-local-history t)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
+ '(neo-window-fixed-size nil)
  '(org-cycle-include-plain-lists (quote integrate))
  '(org-export-with-author t)
  '(org-export-with-title t)
@@ -626,7 +630,7 @@ Uses `current-date-time-format' for the formatting the date/time."
      ("org" . "http://orgmode.org/elpa/"))))
  '(package-selected-packages
    (quote
-    (transpose-mark geben history crystal-mode monokai-theme twig-mode toggle-quotes format-sql feature-mode el-get apache-mode org-journal cycle-quotes yaml-mode web-mode web-beautify unfill tagedit sql-indent smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake pug-mode phpunit phpcbf php-auto-yasnippets orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download mwim mmm-mode minitest markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd less-css-mode json-snatcher json-reformat js2-refactor js-doc htmlize helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy evil-magit magit magit-popup git-commit with-editor emmet-mode drupal-mode php-mode disaster company-web web-completion-data company-tern dash-functional tern company-c-headers company cmake-mode clojure-snippets clj-refactor inflections edn multiple-cursors paredit peg clang-format cider-eval-sexp-fu cider seq queue clojure-mode chruby bundler inf-ruby auto-yasnippet ac-ispell auto-complete ws-butler winum volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed ace-link ace-jump-helm-line helm helm-core popup yasnippet which-key php-extras json-mode js2-mode evil-unimpaired diff-hl company-statistics coffee-mode async aggressive-indent adaptive-wrap ace-window)))
+    (ghub let-alist avy f dash s go-guru go-eldoc company-go go-mode transpose-mark geben history crystal-mode monokai-theme twig-mode toggle-quotes format-sql feature-mode el-get apache-mode org-journal cycle-quotes yaml-mode web-mode web-beautify unfill tagedit sql-indent smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake pug-mode phpunit phpcbf php-auto-yasnippets orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download mwim mmm-mode minitest markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd less-css-mode json-snatcher json-reformat js2-refactor js-doc htmlize helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy evil-magit magit magit-popup git-commit with-editor emmet-mode drupal-mode php-mode disaster company-web web-completion-data company-tern dash-functional tern company-c-headers company cmake-mode clojure-snippets clj-refactor inflections edn multiple-cursors paredit peg clang-format cider-eval-sexp-fu cider seq queue clojure-mode chruby bundler inf-ruby auto-yasnippet ac-ispell auto-complete ws-butler winum volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed ace-link ace-jump-helm-line helm helm-core popup yasnippet which-key php-extras json-mode js2-mode evil-unimpaired diff-hl company-statistics coffee-mode async aggressive-indent adaptive-wrap ace-window)))
  '(php-mode-coding-style (quote psr2))
  '(tramp-copy-size-limit 1024000)
  '(tramp-inline-compress-start-size 1000000))
@@ -635,4 +639,5 @@ Uses `current-date-time-format' for the formatting the date/time."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((((class color) (min-colors 257)) (:foreground "#F8F8F2" :background "#272822")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background "#1B1E1C"))))
  '(geben-breakpoint-face ((t (:background "red4" :foreground "white")))))
