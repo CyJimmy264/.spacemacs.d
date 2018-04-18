@@ -575,6 +575,14 @@ Uses `current-date-time-format' for the formatting the date/time."
     (call-interactively 'org-reload))
 
 
+  (add-hook 'persp-before-switch-functions
+            (lambda (next-pn w-or-f)
+              (winum-select-window-1)
+              (neotree-hide)
+              ))
+
+  (global-set-key (kbd "<f5>") 'neotree-find-project-root)
+
   (add-hook 'ruby-mode-hook
             (lambda () (hs-minor-mode)))
 
