@@ -631,6 +631,8 @@ Uses `current-date-time-format' for the formatting the date/time."
  '(org-footnote-section "Ссылки")
  '(org-html-htmlize-output-type (quote css))
  '(org-journal-find-file (quote find-file))
+ '(org-src-preserve-indentation nil)
+ '(org-src-tab-acts-natively t)
  '(package-archives
    (quote
     (("melpa" . "https://melpa.org/packages/")
