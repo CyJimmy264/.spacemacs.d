@@ -91,9 +91,6 @@ This function should only modify configuration layer settings."
                treemacs-use-scope-type 'Perspectives
                treemacs-use-all-the-icons-theme t
                )
-
-     ;; spacemacs-editing
-     ;; (spacemacs-editing :packages unkillable-scratch)
      )
 
 
@@ -129,10 +126,9 @@ This function should only modify configuration layer settings."
      geben
 
      spaceline-all-the-icons
+     treemacs-all-the-icons
 
      unkillable-scratch
-     ;; (unkillable-scratch :variables
-     ;;                     unkillable-buffers '("*scratch*" ".keep"))
      )
 
    ;; A list of packages that cannot be updated.
@@ -292,7 +288,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, `kill-buffer' on *scratch* buffer
    ;; will bury it instead of killing.
-   dotspacemacs-scratch-buffer-unkillable nil
+   dotspacemacs-scratch-buffer-unkillable t
 
    ;; Initial message in the scratch buffer, such as "Welcome to Spacemacs!"
    ;; (default nil)
@@ -626,12 +622,6 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  (use-package unkillable-scratch
-    :ensure t
-    ;; :pin melpa-stable
-    :config (unkillable-scratch t)
-    )
-
   (add-to-list 'unkillable-buffers ".keep")
 
   (with-eval-after-load "ispell"
@@ -852,9 +842,10 @@ Uses `current-date-time-format' for the formatting the date/time."
               to-delete-keys))))
   (defun my/lsp-clear-leak ()
     "Clear all leaks"
-    (maphash (lambda (_ client)
-               (my/lsp-client-clear-leak-handlers client))
-             lsp-clients))
+    (if (boundp 'lsp-clients)
+        (maphash (lambda (_ client)
+                   (my/lsp-client-clear-leak-handlers client))
+                 lsp-clients)))
   (setq my/lsp-clear-leak-timer
         (run-with-timer 5 5 #'my/lsp-clear-leak))
 
@@ -894,7 +885,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 
   (global-set-key (kbd "s-/") 'my-ido-or-ivy-hippie-expand)
 
-  (define-minor-mode ansi-color-mode 
+  (define-minor-mode ansi-color-mode
     "ANSI Color Mode"
     nil nil nil
     (ansi-color-apply-on-region 1 (buffer-size)))
@@ -926,10 +917,11 @@ This function is called at the very end of Spacemacs initialization."
    '(org-export-with-broken-links 'mark)
    '(org-hide-leading-stars t)
    '(package-selected-packages
-     '(unkillable-scratch shut-up spacemacs-whitespace-cleanup string-edit-at-point visual-fill ccls dap-mode lsp-docker bui flycheck-pos-tip flycheck-rtags flycheck-ycmd helm-lsp dockerfile-mode auto-dictionary flyspell-correct-helm flyspell-correct flyspell-popup vline systemd journalctl-mode xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help org-rich-yank org-projectile org-category-capture org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink enh-ruby-mode treemacs-all-the-icons yasnippet-snippets yapfify yaml-mode web-mode web-beautify unfill twig-mode treemacs-magit treemacs-evil transpose-mark toggle-quotes tide typescript-mode tagedit sql-indent sphinx-doc smeargle slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rjsx-mode rbenv pytest pyenv-mode pydoc py-isort pug-mode projectile-rails rake inflections prettier-js poetry play-crystal pippel pipenv pyvenv pip-requirements phpunit phpcbf composer php-extras php-auto-yasnippets orgit-forge forge yaml ghub closql emacsql-sqlite emacsql treepy orgit request-deferred alert log4e gntp ob-crystal npm-mode nose nodejs-repl neotree mwim mmm-mode minitest markdown-toc magit magit-section git-commit with-editor lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami lsp-mode livid-mode skewer-mode live-py-mode kotlin-mode json-reformat hierarchy json-snatcher js2-mode js-doc simple-httpd htmlize history helm-pydoc helm-org-rifle helm-ls-git helm-git-grep helm-css-scss haml-mode groovy-mode pcache google-c-style godoctor go-gen-test go-fill-struct go-mode gnuplot gitignore-templates git-modes git-messenger git-link git-gutter gh-md geben fuzzy format-sql transient rtags pos-tip flycheck-kotlin flycheck-crystal feature-mode evil-org evil-easymotion emmet-mode el-get docker-tramp disaster cython-mode csv-mode crystal-mode cpp-auto-include deferred php-runtime php-mode company clojure-mode cider-eval-sexp-fu parseclj chruby markdown-mode inf-ruby browse-at-remote blacken yasnippet apache-mode pythonic auto-complete ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line))
+     '(counsel-projectile unkillable-scratch shut-up spacemacs-whitespace-cleanup string-edit-at-point visual-fill ccls dap-mode lsp-docker bui flycheck-pos-tip flycheck-rtags flycheck-ycmd helm-lsp dockerfile-mode auto-dictionary flyspell-correct-helm flyspell-correct flyspell-popup vline systemd journalctl-mode xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help org-rich-yank org-projectile org-category-capture org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink enh-ruby-mode treemacs-all-the-icons yasnippet-snippets yapfify yaml-mode web-mode web-beautify unfill twig-mode treemacs-magit treemacs-evil transpose-mark toggle-quotes tide typescript-mode tagedit sql-indent sphinx-doc smeargle slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rjsx-mode rbenv pytest pyenv-mode pydoc py-isort pug-mode projectile-rails rake inflections prettier-js poetry play-crystal pippel pipenv pyvenv pip-requirements phpunit phpcbf composer php-extras php-auto-yasnippets orgit-forge forge yaml ghub closql emacsql-sqlite emacsql treepy orgit request-deferred alert log4e gntp ob-crystal npm-mode nose nodejs-repl neotree mwim mmm-mode minitest markdown-toc magit magit-section git-commit with-editor lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami lsp-mode livid-mode skewer-mode live-py-mode kotlin-mode json-reformat hierarchy json-snatcher js2-mode js-doc simple-httpd htmlize history helm-pydoc helm-org-rifle helm-ls-git helm-git-grep helm-css-scss haml-mode groovy-mode pcache google-c-style godoctor go-gen-test go-fill-struct go-mode gnuplot gitignore-templates git-modes git-messenger git-link git-gutter gh-md geben fuzzy format-sql transient rtags pos-tip flycheck-kotlin flycheck-crystal feature-mode evil-org evil-easymotion emmet-mode el-get docker-tramp disaster cython-mode csv-mode crystal-mode cpp-auto-include deferred php-runtime php-mode company clojure-mode cider-eval-sexp-fu parseclj chruby markdown-mode inf-ruby browse-at-remote blacken yasnippet apache-mode pythonic auto-complete ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line))
    '(paradox-github-token t)
    '(ruby-align-chained-calls nil)
    '(sh-basic-offset 2)
+   '(treemacs-no-png-images nil)
    '(warning-suppress-types '((comp)))
    '(web-mode-code-indent-offset 2)
    '(web-mode-css-indent-offset 2)
