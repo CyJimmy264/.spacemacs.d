@@ -81,7 +81,7 @@ This function should only modify configuration layer settings."
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      (spell-checking :variables
-                     enable-flyspell-auto-completion t)
+                     enable-flyspell-auto-completion nil)
      ;; syntax-checking
 
      version-control
@@ -628,6 +628,7 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (add-to-list 'unkillable-buffers ".keep")
+  (add-to-list 'unkillable-buffers ".ruby-version")
 
   (with-eval-after-load "ispell"
     (setq ispell-program-name "hunspell")
@@ -684,7 +685,7 @@ before packages are loaded."
   (global-set-key (kbd "<f7>") 'save-buffer)
 
   ;; Закрыть буфер
-  (global-set-key (kbd "M-s-k") 'kill-this-buffer)
+  (global-set-key (kbd "M-s-k") 'kill-current-buffer)
 
   ;; Закрыть окно
   (global-set-key (kbd "M-s-c") 'delete-window)
@@ -930,7 +931,7 @@ Uses `current-date-time-format' for the formatting the date/time."
     ;; optionally set a timer, which might speed up things as the
     ;; codeium local language server takes ~0.2s to start up
     (add-hook 'emacs-startup-hook
-     (lambda () (run-with-timer 0.1 nil #'codeium-init)))
+              (lambda () (run-with-timer 0.1 nil #'codeium-init)))
 
     ;; :defer t ;; lazy loading, if you want
     :config
@@ -991,39 +992,41 @@ Uses `current-date-time-format' for the formatting the date/time."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(css-indent-offset 2)
- '(evil-want-Y-yank-to-eol nil)
- '(helm-ls-git-ls-switches '("diff" "develop..." "--name-only"))
- '(js-indent-level 2)
- '(js2-strict-missing-semi-warning nil)
- '(lsp-solargraph-autoformat t)
- '(lsp-solargraph-multi-root nil)
- '(lsp-solargraph-use-bundler nil)
- '(org-adapt-indentation t)
- '(org-edit-src-content-indentation 0)
- '(org-export-backends '(ascii html icalendar latex md odt))
- '(org-export-with-broken-links 'mark)
- '(org-hide-leading-stars t)
- '(org-src-preserve-indentation t)
- '(package-selected-packages
-   '(company-php ac-php-core xcscope company-phpactor counsel-gtags counsel swiper ivy drupal-mode ggtags phpactor codeium nginx-mode counsel-projectile unkillable-scratch shut-up spacemacs-whitespace-cleanup string-edit-at-point visual-fill ccls dap-mode lsp-docker bui flycheck-pos-tip flycheck-rtags flycheck-ycmd helm-lsp dockerfile-mode auto-dictionary flyspell-correct-helm flyspell-correct flyspell-popup vline systemd journalctl-mode xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help org-rich-yank org-projectile org-category-capture org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink enh-ruby-mode treemacs-all-the-icons yasnippet-snippets yapfify yaml-mode web-mode web-beautify unfill twig-mode treemacs-magit treemacs-evil transpose-mark toggle-quotes tide typescript-mode tagedit sql-indent sphinx-doc smeargle slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rjsx-mode rbenv pytest pyenv-mode pydoc py-isort pug-mode projectile-rails rake inflections prettier-js poetry play-crystal pippel pipenv pyvenv pip-requirements phpunit phpcbf composer php-extras php-auto-yasnippets orgit-forge forge yaml ghub closql emacsql-sqlite emacsql treepy orgit request-deferred alert log4e gntp ob-crystal npm-mode nose nodejs-repl neotree mwim mmm-mode minitest markdown-toc magit magit-section git-commit with-editor lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami lsp-mode livid-mode skewer-mode live-py-mode kotlin-mode json-reformat hierarchy json-snatcher js2-mode js-doc simple-httpd htmlize history helm-pydoc helm-org-rifle helm-ls-git helm-git-grep helm-css-scss haml-mode groovy-mode pcache google-c-style godoctor go-gen-test go-fill-struct go-mode gnuplot gitignore-templates git-modes git-messenger git-link git-gutter gh-md geben fuzzy format-sql transient rtags pos-tip flycheck-kotlin flycheck-crystal feature-mode evil-org evil-easymotion emmet-mode el-get docker-tramp disaster cython-mode csv-mode crystal-mode cpp-auto-include deferred php-runtime php-mode company clojure-mode cider-eval-sexp-fu parseclj chruby markdown-mode inf-ruby browse-at-remote blacken yasnippet apache-mode pythonic auto-complete ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line))
- '(paradox-github-token t)
- '(ruby-align-chained-calls nil)
- '(sh-basic-offset 2)
- '(treemacs-no-png-images nil)
- '(warning-suppress-types '((comp)))
- '(web-mode-code-indent-offset 2)
- '(web-mode-css-indent-offset 2)
- '(web-mode-markup-indent-offset 2))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
-)
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(codeium/metadata/api_key "0da88dc5-f4cf-4db6-9984-756c7e27f001")
+   '(css-indent-offset 2)
+   '(evil-want-Y-yank-to-eol nil)
+   '(helm-ls-git-ls-switches '("diff" "develop..." "--name-only"))
+   '(js-indent-level 2)
+   '(js2-strict-missing-semi-warning nil)
+   '(lsp-completion-enable nil)
+   '(lsp-solargraph-autoformat t)
+   '(lsp-solargraph-multi-root nil)
+   '(lsp-solargraph-use-bundler nil)
+   '(org-adapt-indentation t)
+   '(org-edit-src-content-indentation 0)
+   '(org-export-backends '(ascii html icalendar latex md odt))
+   '(org-export-with-broken-links 'mark)
+   '(org-hide-leading-stars t)
+   '(org-src-preserve-indentation t)
+   '(package-selected-packages
+     '(company-php ac-php-core xcscope company-phpactor counsel-gtags counsel swiper ivy drupal-mode ggtags phpactor codeium nginx-mode counsel-projectile unkillable-scratch shut-up spacemacs-whitespace-cleanup string-edit-at-point visual-fill ccls dap-mode lsp-docker bui flycheck-pos-tip flycheck-rtags flycheck-ycmd helm-lsp dockerfile-mode auto-dictionary flyspell-correct-helm flyspell-correct flyspell-popup vline systemd journalctl-mode xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help org-rich-yank org-projectile org-category-capture org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink enh-ruby-mode treemacs-all-the-icons yasnippet-snippets yapfify yaml-mode web-mode web-beautify unfill twig-mode treemacs-magit treemacs-evil transpose-mark toggle-quotes tide typescript-mode tagedit sql-indent sphinx-doc smeargle slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rjsx-mode rbenv pytest pyenv-mode pydoc py-isort pug-mode projectile-rails rake inflections prettier-js poetry play-crystal pippel pipenv pyvenv pip-requirements phpunit phpcbf composer php-extras php-auto-yasnippets orgit-forge forge yaml ghub closql emacsql-sqlite emacsql treepy orgit request-deferred alert log4e gntp ob-crystal npm-mode nose nodejs-repl neotree mwim mmm-mode minitest markdown-toc magit magit-section git-commit with-editor lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami lsp-mode livid-mode skewer-mode live-py-mode kotlin-mode json-reformat hierarchy json-snatcher js2-mode js-doc simple-httpd htmlize history helm-pydoc helm-org-rifle helm-ls-git helm-git-grep helm-css-scss haml-mode groovy-mode pcache google-c-style godoctor go-gen-test go-fill-struct go-mode gnuplot gitignore-templates git-modes git-messenger git-link git-gutter gh-md geben fuzzy format-sql transient rtags pos-tip flycheck-kotlin flycheck-crystal feature-mode evil-org evil-easymotion emmet-mode el-get docker-tramp disaster cython-mode csv-mode crystal-mode cpp-auto-include deferred php-runtime php-mode company clojure-mode cider-eval-sexp-fu parseclj chruby markdown-mode inf-ruby browse-at-remote blacken yasnippet apache-mode pythonic auto-complete ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line))
+   '(paradox-github-token t)
+   '(ruby-align-chained-calls nil)
+   '(sh-basic-offset 2)
+   '(treemacs-no-png-images nil)
+   '(warning-suppress-types '((comp)))
+   '(web-mode-code-indent-offset 2)
+   '(web-mode-css-indent-offset 2)
+   '(web-mode-markup-indent-offset 2))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
+  )
